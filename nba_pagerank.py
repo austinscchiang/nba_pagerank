@@ -40,7 +40,7 @@ class NbaPagerank(object):
             matches_reader = csv.reader(matches_csv)
             return [
                 NbaMatch(match[2], match[4])
-                if match[3] > match[5]
+                if int(match[3]) > int(match[5])
                 else NbaMatch(match[4], match[2])
                 for match in matches_reader
             ]
