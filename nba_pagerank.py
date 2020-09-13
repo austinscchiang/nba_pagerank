@@ -7,14 +7,14 @@ class PageRank(object):
             assert len(M[0]) == len(M)
         self.M = M
         self.N = len(self.M) # M is a square matrix; N-by-N 2D array.
-        self.R_0 = np.full((self.N, 1), 1/float(self.N))
+        self.R_0 = np.full((self.N, 1), 1 / float(self.N))
         self.one_vector = np.ones((self.N, 1))
 
     # see https://en.wikipedia.org/wiki/PageRank#Iterative
     def run(self, iterations=100, d=0.85):
         R = self.R_0
         for i in range(iterations):
-            R = np.add(d * np.matmul(self.M, R), (1 - d)/float(self.N) * self.one_vector)
+            R = np.add(d * np.matmul(self.M, R), (1 - d) / float(self.N) * self.one_vector)
         return R
 
 class NbaPageRank(PageRank):
@@ -37,7 +37,7 @@ class NbaPageRank(PageRank):
                     M.itemset((i, j), 1 / float(len(j_loss_list)))
 
         M = M
-        R_0 = np.full((self.num_teams, 1), 1/float(self.num_teams))
+        R_0 = np.full((self.num_teams, 1), 1 / float(self.num_teams))
 
         super().__init__(M, R_0)
 
@@ -62,8 +62,8 @@ class NbaPageRank(PageRank):
     def build_graph(self, matches):
         team_to_team_record = {}
         team_names = {match.loser for match in matches} | {match.winner for match in matches}
-        self.team_name_to_id = {team_name:i for i, team_name in enumerate(team_names)}
-        self.team_id_to_name = {i:team_name for i, team_name in enumerate(team_names)}
+        self.team_name_to_id = {team_name : i for i, team_name in enumerate(team_names)}
+        self.team_id_to_name = {i : team_name for i, team_name in enumerate(team_names)}
 
         for match in matches:
             loser_id = self.team_name_to_id[match.loser]
