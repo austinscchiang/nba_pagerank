@@ -14,11 +14,10 @@ class PageRank(object):
     def run(self, iterations=100, d=0.85):
         R = self.R_0
         for i in range(iterations):
-            R = np.add(self.d * np.matmul(self.M, R), (1 - self.d)/float(self.N) * self.one_vector)
+            R = np.add(d * np.matmul(self.M, R), (1 - d)/float(self.N) * self.one_vector)
         return R
 
 class NbaPageRank(PageRank):
-    d = 0.85
     CSV_REGULAR_SEASON = 'data/2018_2019/regular_season.csv'
     CSV_PLAYOFFS = 'data/2018_2019/playoffs.csv'
 
