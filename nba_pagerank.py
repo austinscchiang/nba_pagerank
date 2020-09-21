@@ -3,8 +3,7 @@ import numpy as np
 
 class PageRank(object):
     def __init__(self, M, R):
-        if len(M) > 0:
-            assert len(M[0]) == len(M)
+        assert len(M) > 0 and len(M[0]) == len(M)
         self.M = M
         self.N = len(self.M) # M is a square matrix; N-by-N 2D numpy array.
         self.R_0 = np.full((self.N, 1), 1 / float(self.N))
