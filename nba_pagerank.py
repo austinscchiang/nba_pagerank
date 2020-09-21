@@ -62,8 +62,8 @@ class NbaPageRank(PageRank):
     def build_graph(self, matches):
         team_to_team_record = {}
         team_names = {match.loser for match in matches} | {match.winner for match in matches}
-        self.team_name_to_id = {team_name : i for i, team_name in enumerate(team_names)}
-        self.team_id_to_name = {i : team_name for i, team_name in enumerate(team_names)}
+        self.team_name_to_id = {team_name: i for i, team_name in enumerate(team_names)}
+        self.team_id_to_name = {i: team_name for i, team_name in enumerate(team_names)}
 
         for match in matches:
             loser_id = self.team_name_to_id[match.loser]
