@@ -10,7 +10,7 @@ class PageRank(object):
         self.one_vector = np.ones((self.N, 1))
 
     # see https://en.wikipedia.org/wiki/PageRank#Iterative
-    def run(self, iterations=100, d=0.85):
+    def run(self, iterations=100, damping_factor=0.85):
         R = self.R_0
         for i in range(iterations):
             R = np.add(d * np.matmul(self.M, R), (1 - d) / float(self.N) * self.one_vector)
