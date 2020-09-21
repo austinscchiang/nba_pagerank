@@ -20,8 +20,8 @@ class NbaPageRank(PageRank):
     CSV_REGULAR_SEASON = 'data/2018_2019/regular_season.csv'
     CSV_PLAYOFFS = 'data/2018_2019/playoffs.csv'
 
-    def __init__(self, playoffs=False):
-        self.playoffs = playoffs
+    def __init__(self, use_playoffs_data=False):
+        self.use_playoffs_data = use_playoffs_data
         matches = self.matches_playoffs() if playoffs else self.matches_regular_season()
         self.team_record_graph = self.build_graph(matches)
         self.num_teams = len(self.team_record_graph)
