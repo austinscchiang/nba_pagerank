@@ -2,7 +2,7 @@ import csv
 import numpy as np
 
 class PageRank(object):
-    def __init__(self, M, R):
+    def __init__(self, transition_matrix, ranks):
         assert len(M) > 0 and len(M[0]) == len(M)
         self.M = M
         self.N = len(self.M) # M is a square matrix; N-by-N 2D numpy array.
