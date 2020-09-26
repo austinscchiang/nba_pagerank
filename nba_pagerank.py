@@ -35,7 +35,6 @@ class NbaPageRank(PageRank):
                 if i in j_loss_list:
                     M.itemset((i, j), 1 / float(len(j_loss_list)))
 
-        M = M
         R_0 = np.full((self.num_teams, 1), 1 / float(self.num_teams))
 
         super().__init__(M, R_0)
