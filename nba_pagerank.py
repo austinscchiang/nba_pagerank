@@ -5,7 +5,7 @@ class PageRank(object):
     def __init__(self, transition_matrix, ranks):
         assert len(M) > 0 and len(M[0]) == len(M)
         self.M = M
-        self.N = len(self.M) # M is a square matrix; N-by-N 2D numpy array.
+        self.num_teams = len(self.M) # M is a square matrix; N-by-N 2D numpy array.
         self.R_0 = np.full((self.N, 1), 1 / float(self.N))
         self.one_vector = np.ones((self.N, 1))
 
