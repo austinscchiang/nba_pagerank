@@ -2,19 +2,19 @@ import csv
 import numpy as np
 
 class PageRank(object):
-    def __init__(self, transition_matrix, ranks):
-        assert len(M) > 0 and len(M[0]) == len(M)
-        self.M = M
-        self.num_teams = len(self.M) # M is a square matrix; N-by-N 2D numpy array.
-        self.R_0 = np.full((self.N, 1), 1 / float(self.N))
-        self.one_vector = np.ones((self.N, 1))
+    def __init__(self, transition_matrix):
+        assert len(transition_matrix) > 0 and len(transition_matrix[0]) == len(transition_matrix)
+        self.transition_matrix = transition_matrix
+        self.size = len(self.transition_matrix) # M is a square matrix; N-by-N 2D numpy array.
+        self.initial_ranks = np.full((self.size, 1), 1 / float(self.size))
+        self.one_vector = np.ones((self.size, 1))
 
     # see https://en.wikipedia.org/wiki/PageRank#Iterative
     def run(self, iterations=100, damping_factor=0.85):
-        R = self.R_0
+        ranks = self.initial_ranks
         for i in range(iterations):
-            R = np.add(d * np.matmul(self.M, R), (1 - d) / float(self.N) * self.one_vector)
-        return R
+            ranks = np.add(damping_factor * np.matmul(self.transition_matrix, ranks), (1 - damping_factor) / float(self.size) * self.one_vector)
+        return ranks
 
 class NbaPageRank(PageRank):
     CSV_REGULAR_SEASON = 'data/2018_2019/regular_season.csv'
@@ -22,22 +22,20 @@ class NbaPageRank(PageRank):
 
     def __init__(self, use_playoffs_data=False):
         self.use_playoffs_data = use_playoffs_data
-        matches = self.matches_playoffs() if playoffs else self.matches_regular_season()
+        matches = self.matches_playoffs() if use_playoffs_data else self.matches_regular_season()
         self.team_record_graph = self.build_graph(matches)
-        num_teams = len(self.team_record_graph)
+        self.num_teams = len(self.team_record_graph)
 
-        M = np.zeros((self.num_teams, self.num_teams))
+        transition_matrix = np.zeros((self.num_teams, self.num_teams))
 
         for i in range(self.num_teams):
             for j in range(self.num_teams):
                 # edge j -> i means j has lost to i
                 j_loss_list = self.team_record_graph[j].loss_list
                 if i in j_loss_list:
-                    M.itemset((i, j), 1 / float(len(j_loss_list)))
+                    transition_matrix.itemset((i, j), 1 / float(len(j_loss_list)))
 
-        R_0 = np.full((self.num_teams, 1), 1 / float(self.num_teams))
-
-        super().__init__(M, R_0)
+        super().__init__(transition_matrix)
 
 
     def print_graph(self):
@@ -50,7 +48,7 @@ class NbaPageRank(PageRank):
         flat = [score for score_list in R for score in score_list]
         team_id_score = [(self.team_id_to_name[team_id], score) for team_id, score in enumerate(flat)]
         score_sorted_desc = sorted(team_id_score, key=lambda x: x[1], reverse=True)
-        print(f"Top {top} in {'playoffs' if self.playoffs else 'regular season'} (desc):")
+        print(f"Top {top} in {'playoffs' if self.use_playoffs_data else 'regular season'} (desc):")
         print(*score_sorted_desc[:top], sep='\n', end='\n'*2)
 
     def is_finished(self):
@@ -118,6 +116,6 @@ class NbaTeamRecord(object):
         self.loss_list.append(team_id_winner)
 
 for use_playoffs_data in [False, True]:
-    nba_pagerank = NbaPageRank(playoffs=use_playoffs_data)
-    R = nba_pagerank.run(iterations=100, d=0.85)
+    nba_pagerank = NbaPageRank(use_playoffs_data=use_playoffs_data)
+    R = nba_pagerank.run(iterations=100, damping_factor=0.85)
     nba_pagerank.print_result(R)
