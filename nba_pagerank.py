@@ -111,7 +111,6 @@ class NbaTeamRecord(object):
         loss_list_formatted = ", ".join(map(str, self.loss_list))
         wins_count = len(self.wins_list)
         loss_count = len(self.loss_list)
-        # assert(wins_count + loss_count == 82)
         return f"Team: {self.team_name} Win Count: {wins_count} Wins: {wins_list_formatted}\n Loss Count: {loss_count} Losses: {loss_list_formatted}\n"
 
     def record_win(self, team_id_loser):
