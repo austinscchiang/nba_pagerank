@@ -1,14 +1,19 @@
 from typing import Dict, List
 import csv
-import numpy as np # type: ignore
+import numpy as np  # type: ignore
+
 
 class PageRank(object):
     team_id_to_name: Dict[int, str]
 
     def __init__(self, transition_matrix) -> None:
-        assert len(transition_matrix) > 0 and len(transition_matrix[0]) == len(transition_matrix)
+        assert len(transition_matrix) > 0 and len(transition_matrix[0]) == len(
+            transition_matrix
+        )
         self.transition_matrix = transition_matrix
-        self.size = len(self.transition_matrix) # M is a square matrix; N-by-N 2D numpy array.
+        self.size = len(
+            self.transition_matrix
+        )  # M is a square matrix; N-by-N 2D numpy array.
         self.initial_ranks = np.full((self.size, 1), 1 / float(self.size))
         self.one_vector = np.ones((self.size, 1))
 
@@ -16,16 +21,24 @@ class PageRank(object):
     def run(self, iterations=100, damping_factor=0.85) -> List[List[float]]:
         ranks = self.initial_ranks
         for i in range(iterations):
-            ranks = np.add(damping_factor * np.matmul(self.transition_matrix, ranks), (1 - damping_factor) / float(self.size) * self.one_vector)
+            ranks = np.add(
+                damping_factor * np.matmul(self.transition_matrix, ranks),
+                (1 - damping_factor) / float(self.size) * self.one_vector,
+            )
         return ranks
 
-class NbaPageRank(PageRank):
-    CSV_REGULAR_SEASON = 'data/2018_2019/regular_season.csv'
-    CSV_PLAYOFFS = 'data/2018_2019/playoffs.csv'
 
-    def __init__(self, use_playoffs_data: bool=False) -> None:
+class NbaPageRank(PageRank):
+    CSV_REGULAR_SEASON = "data/2018_2019/regular_season.csv"
+    CSV_PLAYOFFS = "data/2018_2019/playoffs.csv"
+
+    def __init__(self, use_playoffs_data: bool = False) -> None:
         self.use_playoffs_data = use_playoffs_data
-        matches = self.matches_playoffs() if use_playoffs_data else self.matches_regular_season()
+        matches = (
+            self.matches_playoffs()
+            if use_playoffs_data
+            else self.matches_regular_season()
+        )
         self.team_record_graph = self.build_graph(matches)
         self.num_teams = len(self.team_record_graph)
 
@@ -40,26 +53,31 @@ class NbaPageRank(PageRank):
 
         super().__init__(transition_matrix)
 
-
     def print_graph(self) -> None:
         for _, team_record in self.team_record_graph.items():
             print(team_record)
         print(f"There are {self.num_teams} teams in total\n")
 
-    def print_result(self, R: List[List[float]], top: int=5) -> None:
-        assert(top <= self.num_teams)
+    def print_result(self, R: List[List[float]], top: int = 5) -> None:
+        assert top <= self.num_teams
         flat = [score for score_list in R for score in score_list]
-        team_id_score = [(self.team_id_to_name[team_id], score) for team_id, score in enumerate(flat)]
+        team_id_score = [
+            (self.team_id_to_name[team_id], score) for team_id, score in enumerate(flat)
+        ]
         score_sorted_desc = sorted(team_id_score, key=lambda x: x[1], reverse=True)
-        print(f"Top {top} in {'playoffs' if self.use_playoffs_data else 'regular season'} (desc):")
-        print(*score_sorted_desc[:top], sep='\n', end='\n'*2)
+        print(
+            f"Top {top} in {'playoffs' if self.use_playoffs_data else 'regular season'} (desc):"
+        )
+        print(*score_sorted_desc[:top], sep="\n", end="\n" * 2)
 
     def is_finished(self) -> None:
         pass
 
     def build_graph(self, matches: List[NbaMatch]) -> Dict[int, NbaTeamRecord]:
         team_to_team_record = {}
-        team_names = {match.loser for match in matches} | {match.winner for match in matches}
+        team_names = {match.loser for match in matches} | {
+            match.winner for match in matches
+        }
         self.team_name_to_id = {team_name: i for i, team_name in enumerate(team_names)}
         self.team_id_to_name = {i: team_name for i, team_name in enumerate(team_names)}
 
@@ -90,6 +108,7 @@ class NbaPageRank(PageRank):
                 for match in matches_reader
             ]
 
+
 class NbaMatch(object):
     def __init__(self, winner: str, loser: str) -> None:
         self.winner = winner
@@ -97,6 +116,7 @@ class NbaMatch(object):
 
     def __repr__(self) -> str:
         return f"Winner: {self.winner} Loser: {self.loser}\n"
+
 
 class NbaTeamRecord(object):
     wins_list: List[int]
@@ -120,6 +140,7 @@ class NbaTeamRecord(object):
 
     def record_loss(self, team_id_winner: int) -> None:
         self.loss_list.append(team_id_winner)
+
 
 for use_playoffs_data in [False, True]:
     nba_pagerank = NbaPageRank(use_playoffs_data=use_playoffs_data)
