@@ -24,7 +24,7 @@ class NbaPageRank(PageRank):
         self.use_playoffs_data = use_playoffs_data
         matches = self.matches_playoffs() if playoffs else self.matches_regular_season()
         self.team_record_graph = self.build_graph(matches)
-        self.num_teams = len(self.team_record_graph)
+        num_teams = len(self.team_record_graph)
 
         M = np.zeros((self.num_teams, self.num_teams))
 
