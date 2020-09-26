@@ -52,8 +52,7 @@ class NbaPageRank(PageRank):
         team_id_score = [(self.team_id_to_name[team_id], score) for team_id, score in enumerate(flat)]
         score_sorted_desc = sorted(team_id_score, key=lambda x: x[1], reverse=True)
         print(f"Top {top} in {'playoffs' if self.playoffs else 'regular season'} (desc):")
-        print(*score_sorted_desc[:top], sep='\n')
-        print()
+        print(*score_sorted_desc[:top], sep='\n', end='\n'*2)
 
     def is_finished(self):
         pass
