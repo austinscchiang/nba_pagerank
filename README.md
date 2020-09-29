@@ -5,7 +5,7 @@
 
 Install pip dependencies:
 ```
-./install.sh
+$ ./install.sh
 ```
 
 ## Run
