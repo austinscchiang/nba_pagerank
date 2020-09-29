@@ -34,7 +34,7 @@ Top 5 in playoffs (desc):
 
 ## Lint
 
-We use [`mypy`](https://github.com/python/mypy) for linting.
+We use [`mypy`](https://github.com/python/mypy) for static type-checking.
 ```
 $ source .env/bin/activate
 $(.env) mypy src/
