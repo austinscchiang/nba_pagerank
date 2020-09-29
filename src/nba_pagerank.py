@@ -3,6 +3,39 @@ import csv
 import numpy as np  # type: ignore
 
 
+class NbaMatch(object):
+    def __init__(self, winner: str, loser: str) -> None:
+        self.winner = winner
+        self.loser = loser
+
+    def __repr__(self) -> str:
+        return f"Winner: {self.winner} Loser: {self.loser}\n"
+
+
+class NbaTeamRecord(object):
+    wins_list: List[int]
+    loss_list: List[int]
+
+    def __init__(self, team_id: int, team_name: str) -> None:
+        self.team_id = team_id
+        self.team_name = team_name
+        self.wins_list = []
+        self.loss_list = []
+
+    def __repr__(self) -> str:
+        wins_list_formatted = ", ".join(map(str, self.wins_list))
+        loss_list_formatted = ", ".join(map(str, self.loss_list))
+        wins_count = len(self.wins_list)
+        loss_count = len(self.loss_list)
+        return f"Team: {self.team_name} Win Count: {wins_count} Wins: {wins_list_formatted}\n Loss Count: {loss_count} Losses: {loss_list_formatted}\n"
+
+    def record_win(self, team_id_loser: int) -> None:
+        self.wins_list.append(team_id_loser)
+
+    def record_loss(self, team_id_winner: int) -> None:
+        self.loss_list.append(team_id_winner)
+
+
 class PageRank(object):
     team_id_to_name: Dict[int, str]
 
@@ -107,39 +140,6 @@ class NbaPageRank(PageRank):
                 else NbaMatch(match[4], match[2])
                 for match in matches_reader
             ]
-
-
-class NbaMatch(object):
-    def __init__(self, winner: str, loser: str) -> None:
-        self.winner = winner
-        self.loser = loser
-
-    def __repr__(self) -> str:
-        return f"Winner: {self.winner} Loser: {self.loser}\n"
-
-
-class NbaTeamRecord(object):
-    wins_list: List[int]
-    loss_list: List[int]
-
-    def __init__(self, team_id: int, team_name: str) -> None:
-        self.team_id = team_id
-        self.team_name = team_name
-        self.wins_list = []
-        self.loss_list = []
-
-    def __repr__(self) -> str:
-        wins_list_formatted = ", ".join(map(str, self.wins_list))
-        loss_list_formatted = ", ".join(map(str, self.loss_list))
-        wins_count = len(self.wins_list)
-        loss_count = len(self.loss_list)
-        return f"Team: {self.team_name} Win Count: {wins_count} Wins: {wins_list_formatted}\n Loss Count: {loss_count} Losses: {loss_list_formatted}\n"
-
-    def record_win(self, team_id_loser: int) -> None:
-        self.wins_list.append(team_id_loser)
-
-    def record_loss(self, team_id_winner: int) -> None:
-        self.loss_list.append(team_id_winner)
 
 
 for use_playoffs_data in [False, True]:
