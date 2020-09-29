@@ -45,5 +45,5 @@ mypy src/
 We use [`black`](https://github.com/psf/black) for linting.
 ```
 source .env/bin/activate
-mypy src/
+black src/
 ```
