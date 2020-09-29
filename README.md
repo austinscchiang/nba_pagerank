@@ -11,8 +11,8 @@ Install pip dependencies:
 ## Run
 
 ```
-source .env/bin/activate
-python3 src/nba_pagerank.py
+$ source .env/bin/activate
+$(.env) python3 src/nba_pagerank.py
 ```
 
 You should see some example output similar to:
@@ -36,14 +36,14 @@ Top 5 in playoffs (desc):
 
 We use [`mypy`](https://github.com/python/mypy) for linting.
 ```
-source .env/bin/activate
-mypy src/
+$ source .env/bin/activate
+$(.env) mypy src/
 ```
 
 ## Formatting 
 
 We use [`black`](https://github.com/psf/black) for linting.
 ```
-source .env/bin/activate
-black src/
+$ source .env/bin/activate
+$(.env) black src/
 ```
